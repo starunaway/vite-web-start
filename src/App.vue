@@ -1,6 +1,7 @@
 <template>
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
-  <JsxComponent msg="jsx"></JsxComponent>
+  <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+  <JsxComponent msg="jsx"></JsxComponent> -->
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
