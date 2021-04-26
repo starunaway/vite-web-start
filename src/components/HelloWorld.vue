@@ -21,6 +21,7 @@
   </p>
 
   <button @click="count++">count is: {{ count }}</button>
+  <button @click="emit">emit</button>
   <p>
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
@@ -29,12 +30,19 @@
 
 <script lang="ts">
 import {ref, defineComponent} from 'vue';
+import EventBridge from '@/app/EventBridge';
+
 export default defineComponent({
   name: 'HelloWorld',
   props: {
     msg: {
       type: String,
       required: true,
+    },
+  },
+  methods: {
+    emit() {
+      EventBridge.emit('test', 'hhh');
     },
   },
   setup: () => {
