@@ -70,11 +70,11 @@ class EventBridge {
     !hasCallback && events?.add({cb: callback, isOnce});
   }
 
-  emit(eventname: string, payload: any) {
+  emit(eventname: string, ...payload: any[]) {
     // if (this.listeners.has(eventname)) {
     const events = this.listeners.get(eventname);
     events?.forEach((e) => {
-      e.cb(payload);
+      e.cb(...payload);
       if (e.isOnce) {
         this.remove(eventname, e.cb);
       }

@@ -11,8 +11,8 @@ export default {
   name: 'about',
   components: {HelloWorld},
   created() {
-    EventBridge.on('test', (v) => {
-      console.log(v);
+    EventBridge.on('test', (v, u) => {
+      console.log(v, u);
     });
   },
 };
