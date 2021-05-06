@@ -1,7 +1,7 @@
 <template>
   <div>about</div>
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite"></HelloWorld>
   <router-link to="/">go home</router-link>
+  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite"></HelloWorld>
 </template>
 
 <script>

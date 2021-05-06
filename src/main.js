@@ -1,8 +1,6 @@
-import {createApp} from 'vue';
+import {createApp, h} from 'vue';
 import './assets/reset.css';
-import App from './App.tsx';
 import router from '@/routers';
+import {RouterView} from 'vue-router';
 
-// const App = () => <router-view></router-view>;
-
-createApp(App).use(router).mount('#app');
+createApp(h(RouterView)).use(router).mount('#app');
