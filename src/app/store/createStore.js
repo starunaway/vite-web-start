@@ -53,6 +53,13 @@ function buildMutations(models) {
 
       console.log(curState, payload);
 
+      payload = {
+        payload,
+        result: payload,
+        loading: false,
+        success: true,
+      };
+
       if (isFunction(model.success)) {
         model.success(curState, payload);
       } else {
@@ -64,15 +71,71 @@ function buildMutations(models) {
   console.log('buildMutations', mutations);
   return mutations;
 }
-function buildActions(models) {
-  return {};
+function buildActions(models, state) {
+  const actions = {};
+  models.forEach((model) => {
+    const keys = model.key.split('.');
+    let curState = state;
+    keys.forEach((k) => {
+      curState = curState[k];
+    });
+
+    actions[model.key] = function (context, payload) {
+      if (model.url && model.method) {
+        if (isFunction(model.loading)) {
+          let loadingPayload = model.loading(curState, payload);
+          context.commit(model.key, loadingPayload);
+        } else {
+          context.commit(model.key, {
+            payload,
+            result: null,
+            loading: true,
+            success: false,
+          });
+        }
+
+        axios[model.method.toLowerCase()](model.url(payload), model.body(payload))
+          .then((result) => {
+            context.commit(model.key, {
+              payload,
+              result,
+              loading: false,
+              success: true,
+            });
+          })
+          .catch((error) => {
+            if (isFunction(model.failure)) {
+              let errResult = model.failure(curState, error);
+              context.commit(model.key, errResult);
+            } else {
+              context.commit(model.key, {
+                payload,
+                error: error,
+                loading: false,
+                success: false,
+              });
+            }
+          });
+      } else {
+        payload = {
+          payload,
+          result: payload,
+          loading: false,
+          success: true,
+        };
+
+        context.commit(model.key, payload);
+      }
+    };
+  });
+  return actions;
 }
 
 export function createAppStore(models) {
   const state = buildState(models);
   console.log('state:', state);
   const mutations = buildMutations(models);
-  const actions = buildActions(models);
+  const actions = buildActions(models, state);
 
   return createStore({
     state,

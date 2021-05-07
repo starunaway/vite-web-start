@@ -14,9 +14,15 @@ export default [
       };
     },
     method: 'post',
-    success: (state: any, action: any) => {},
-    loading: (state: any, action: any) => {},
-    failure: (state: any, action: any) => {},
+    success: (state: any, action: any) => {
+      console.log('login success', state, action);
+    },
+    loading: (state: any, action: any) => {
+      console.log('login loading', state, action);
+    },
+    failure: (state: any, action: any) => {
+      console.log('login failure', state, action);
+    },
   },
   {
     key: 'a.a',

@@ -5,7 +5,7 @@
   <button @click="vuexClicka">vuex-testa</button>
   <button @click="vuexClickb">vuex-testb</button>
   <button @click="vuexClickc">vuex-testc</button>
-  <button @click="vuexDispatch">vuex-vuexDispatch</button>
+  <button @click="login">login</button>
 
   <span>count is :{{ count.value }}</span>
 </template>
@@ -46,8 +46,8 @@ export default {
         c2: this.b,
       });
     },
-    vuexDispatch() {
-      store.dispatch('login', {
+    login() {
+      EventBridge.dispatch('counter.login', {
         userId: 'super',
         password: 'Super20200105@',
       });
