@@ -1,3 +1,5 @@
+import {Store} from 'vuex';
+
 interface EventBridgeEvent {
   cb: Function;
   isOnce?: Boolean;
@@ -7,6 +9,10 @@ interface ProxyPayload {
   event: string;
   params?: any;
   sameProcess?: boolean;
+}
+
+interface State {
+  [field: string]: any;
 }
 
 class NameSpace {
@@ -41,6 +47,7 @@ class NameSpace {
 class EventBridge {
   listeners: Map<String, Set<EventBridgeEvent>> = new Map();
   callproxy = () => {};
+  store: Store<State> | null = null;
   constructor() {
     if (!EventBridge.instance) {
       this.listeners = new Map();
@@ -54,6 +61,10 @@ class EventBridge {
 
   get proxy() {
     return new NameSpace(this.callproxy);
+  }
+
+  setStore(store: Store<State>) {
+    this.store = store;
   }
 
   on(eventname: string = 'defaulteventname', callback: Function, isOnce = false) {
@@ -121,6 +132,19 @@ class EventBridge {
 
   unRegisterProxy(eventname: string) {
     this.removeAll(`_proxy.${eventname}`);
+  }
+
+  dispatch(key: string, ...payload: any[]) {
+    if (!this.store) {
+      throw new Error('You have set store before use!');
+    }
+    this.store.dispatch(key, ...payload);
+  }
+  commit(key: string, ...payload: any[]) {
+    if (!this.store) {
+      throw new Error('You have set store before use!');
+    }
+    this.store.commit(key, ...payload);
   }
 }
 

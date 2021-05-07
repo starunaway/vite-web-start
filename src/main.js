@@ -1,6 +1,15 @@
-import {createApp, h} from 'vue';
 import './assets/reset.css';
 import router from '@/routers';
-import {RouterView} from 'vue-router';
+import models from '@/models';
+import store from '@/store';
 
-createApp(h(RouterView)).use(router).mount('#app');
+import EventBridge from '@/app/EventBridge';
+
+import App from '@/app';
+
+const app = new App();
+app.setRouter(router);
+app.setModels(models);
+app.start('#app');
+
+EventBridge.store = app.getStore();
