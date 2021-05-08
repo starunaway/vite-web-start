@@ -2,13 +2,7 @@ import {createStore, ActionContext, MutationTree, ActionTree} from 'vuex';
 import axios from 'axios';
 import {isFunction} from '../utils';
 import {isStateLegal} from './utils';
-import {AxiosMethods, ModelApi} from '../type';
-
-interface IState {
-  [field: string]: {
-    [field: string]: IState;
-  };
-}
+import {AxiosMethods, IState, ModelApi} from '../type';
 
 function buildState(models: Array<ModelApi>) {
   const initialState: IState = {};

@@ -18,3 +18,9 @@ export interface ModelApi {
   reducer?: ReducerHandler;
   type?: string;
 }
+
+interface IState {
+  [field: string]: {
+    [field: string]: IState;
+  };
+}
