@@ -1,13 +1,14 @@
 export type ReducerHandler = (state: any, action: any) => any;
 
+export type AxiosMethods = 'get' | 'put' | 'post' | 'delete';
+
 export interface ModelApi {
   key: string;
   subKeys?: Array<string>;
   action?: string;
   initialState?: any;
-  method?: string;
+  method?: AxiosMethods;
   url?: (payload: any) => string;
-  single?: boolean;
   headers?: object;
   body?: () => any;
   payload?: any;

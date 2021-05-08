@@ -1,7 +1,6 @@
 import './assets/reset.css';
 import router from '@/routers';
 import models from '@/models';
-import store from '@/store';
 
 import EventBridge from '@/app/EventBridge';
 

@@ -17,8 +17,6 @@
   <modal></modal>
   <h5>renderTest with h</h5>
   <renderTest></renderTest>
-  <h5>renderSlot</h5>
-  <renderSlot></renderSlot>
 </template>
 
 <script lang="ts">
@@ -27,7 +25,6 @@ import EventBridge from '@/app/EventBridge';
 import jsxComponent from './jsxComponent';
 import reactiveComponent from './reactive';
 import modal from './modal.vue';
-import renderSlot from './renderSlot.vue';
 
 export default defineComponent({
   name: 'HelloWorld',
@@ -35,7 +32,6 @@ export default defineComponent({
     jsxComponent,
     reactiveComponent,
     modal,
-    renderSlot,
     renderTest: {
       render() {
         return h('div', [

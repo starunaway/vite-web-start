@@ -6,40 +6,35 @@ export default [
     },
     success: (state: any, action: any) => {
       console.log(state, action);
+      return {
+        hello: state.hello + action,
+      };
     },
   },
   {
     key: 'test.b',
-    // success: (state: any, action: any) => {
-    //   console.log(state, action);
-    // },
   },
   {
     key: 'test.c',
+    initialState: 0,
     success: (state: any, action: any) => {
-      console.log(state, action);
+      return action.a + action.b;
     },
   },
   {
-    key: 's.v.s.sd.e',
+    key: 's.u.v.w.x.y.z',
     initialState: {
       go: 1,
     },
     success: (state: any, action: any) => {
-      console.log('s.v.s.sd.e', state, action);
-      state.go += action;
+      console.log('s.u.v.w.x.y.z', state, action);
+      return {
+        go: state.go + action,
+      };
     },
   },
   {
     key: 'count',
-    // initialState: 1000,
-    // initialState: {
-    //   value: 1000,
-    // },
-    // success: (state: any, action: any) => {
-    //   console.log(state, action);
-    //   //   state += action;
-    //   state.value = state.value + action;
-    // },
+    initialState: 1000,
   },
 ];

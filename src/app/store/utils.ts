@@ -16,10 +16,16 @@ export function isStateLegal(state: any, model: ModelApi) {
   const stateKeys = getDeepStateKey(state).flat();
 
   const hasKey = modelStateKeys.some((key) =>
-    stateKeys.some((statekey) => {
-      if (key && statekey && (statekey.startsWith(key) || key.startsWith(statekey))) {
-        let str = key.length < statekey.length ? key : statekey;
-        return str.includes('.') || key === statekey;
+    stateKeys.some((stateKey) => {
+      if (key && stateKey && (stateKey.startsWith(key) || key.startsWith(stateKey))) {
+        let keyGroup = key.split('.');
+        let stateKeyGroup = stateKey.split('.');
+        for (let i = 0; i < keyGroup.length; i++) {
+          if (keyGroup[i] !== stateKeyGroup[i]) {
+            return false;
+          }
+        }
+        return true;
       }
       return false;
     })

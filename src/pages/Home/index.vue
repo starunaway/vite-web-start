@@ -1,13 +1,33 @@
 <template>
   <div>homes</div>
   <button @click="handleGo">go about</button>
-  <button @click="vuexClick">vuex-count</button>
-  <button @click="vuexClicka">vuex-testa</button>
-  <button @click="vuexClickb">vuex-testb</button>
-  <button @click="vuexClickc">vuex-testc</button>
-  <button @click="login">login</button>
+  <div>
+    <button @click="handleCountClick">count++</button>
+    <span>count is :{{ count }}</span>
+  </div>
+  <div>
+    <button @click="handleTestA">handleTestA</button>
+    <span>test.a is :{{ test.a.hello }}</span>
+  </div>
+  <div>
+    <button @click="handleTestB">handleTestB</button>
+    <span>test.b is :{{ test.b }}</span>
+  </div>
+  <div>
+    <button @click="handleTestC">handleTestC</button>
+    <span>test.c a+b is :{{ test.c }}</span>
+  </div>
 
-  <span>count is :{{ count.value }}</span>
+  <div>
+    <button @click="handleTestD">handleTest s.u.v.w.x</button>
+    <span> s.u.v.w.x is :{{ s.u.v.w.x.y.z.go }}</span>
+  </div>
+
+  <div>
+    <button @click="Clogin">counter.login</button>
+    <button @click="loginA">loginA</button>
+    <button @click="loginAAA">loginAAA</button>
+  </div>
 </template>
 
 <script>
@@ -19,35 +39,52 @@ import EventBridge from '@/app/EventBridge';
 export default {
   data() {
     return {
-      a: 1,
-      b: 1,
+      dataA: 0,
+      dataB: 0,
     };
   },
   methods: {
     handleGo() {
       this.$router.push('/about');
     },
-    vuexClick() {
-      EventBridge.commit('count', 1);
+    handleCountClick() {
+      EventBridge.commit('count', this.count + 1);
     },
-    vuexClicka() {
-      console.log(this.a);
-      this.a++;
-      EventBridge.commit('count', this.a);
-    },
-    vuexClickb() {
-      this.b++;
 
-      EventBridge.commit('test.b', this.b);
+    handleTestA() {
+      this.dataA++;
+      EventBridge.commit('test.a', this.dataA);
     },
-    vuexClickc() {
-      store.commit('updateTestC', {
-        c1: this.a,
-        c2: this.b,
+    handleTestB() {
+      this.dataB++;
+      EventBridge.commit('test.b', this.dataB);
+    },
+    handleTestC() {
+      EventBridge.commit('test.c', {
+        a: this.dataA,
+        b: this.dataB,
       });
     },
-    login() {
+
+    handleTestD() {
+      EventBridge.commit('s.u.v.w.x.y.z', this.dataA);
+    },
+
+    Clogin() {
       EventBridge.dispatch('counter.login', {
+        userId: 'super',
+        password: 'Super20200105@',
+      });
+    },
+
+    loginA() {
+      EventBridge.dispatch('loginA', {
+        userId: 'super',
+        password: 'Super20200105@',
+      });
+    },
+    loginAAA() {
+      EventBridge.dispatch('counter.loginA.loginA.loginA', {
         userId: 'super',
         password: 'Super20200105@',
       });
@@ -57,28 +94,6 @@ export default {
   setup() {
     const store = useStore();
     console.log(store.state);
-    watchEffect(() => {
-      console.log('watchEffect', store.state.login);
-    });
-
-    watch(
-      () => store.state.test.a,
-      (val, old) => {
-        console.log(val, old);
-      }
-    );
-    watch(
-      () => store.state.test.b,
-      (val, old) => {
-        console.log(val, old);
-      }
-    );
-    watch(
-      () => store.state.test.c,
-      (val, old) => {
-        console.log(val, old);
-      }
-    );
 
     return {...toRefs(store.state)};
   },
