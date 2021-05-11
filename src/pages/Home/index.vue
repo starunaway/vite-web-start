@@ -28,13 +28,17 @@
     <button @click="loginA">loginA</button>
     <button @click="loginAAA">loginAAA</button>
   </div>
+
+  <div>
+    <button @click="polling">polling</button>
+  </div>
 </template>
 
 <script>
-import store from '@/store';
 import {useStore} from 'vuex';
 import {toRefs, watch, watchEffect} from 'vue';
 import EventBridge from '@/app/EventBridge';
+import usePolling from '@/app/hooks/usePolling';
 
 export default {
   data() {
@@ -93,9 +97,20 @@ export default {
 
   setup() {
     const store = useStore();
-    console.log(store.state);
 
-    return {...toRefs(store.state)};
+    const [cur, old, startPolling] = usePolling({
+      key: 'poetry',
+      id: '',
+    });
+    watchEffect(() => {
+      console.log('effect', cur);
+    });
+
+    function polling() {
+      startPolling({test: 1});
+    }
+
+    return {...toRefs(store.state), polling};
   },
 };
 </script>

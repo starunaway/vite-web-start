@@ -2,7 +2,7 @@ import {createStore, ActionContext, MutationTree, ActionTree} from 'vuex';
 import axios from 'axios';
 import {isFunction} from '../utils';
 import {isStateLegal} from './utils';
-import {AxiosMethods, IState, ModelApi} from '../type';
+import {AxiosMethods, IState, ModelApi, PluginType} from '../type';
 
 function buildState(models: Array<ModelApi>) {
   const initialState: IState = {};
@@ -54,7 +54,7 @@ function buildMutations(models: Array<ModelApi>) {
       });
 
       if (model.url && model.method) {
-        prevState[keys.pop() as string] = model.payload;
+        prevState[keys.pop() as string] = payload;
       } else if (isFunction(model.success)) {
         let result = (model.success as Function)(curState, payload);
         prevState[keys.pop() as string] = result;
@@ -77,20 +77,27 @@ function buildActions(models: Array<ModelApi>, state: IState) {
 
     actions[model.key] = function (context: ActionContext<IState, IState>, payload: IState) {
       if (model.url && model.method) {
-        let loadingPayload = {
-          payload,
-          result: null,
-          loading: true,
-          success: false,
-        };
+        if (payload.__usePollingLoading || payload.__usePollingLoading === undefined) {
+          // loading
+          delete payload.__usePollingLoading;
+          let loadingPayload = {
+            payload,
+            result: null,
+            loading: true,
+            success: false,
+          };
 
-        if (isFunction(model.loading)) {
-          loadingPayload.result = (model.loading as Function)(curState, payload);
+          if (isFunction(model.loading)) {
+            loadingPayload.result = (model.loading as Function)(curState, payload);
+          }
+          context.commit(model.key, loadingPayload);
         }
 
-        context.commit(model.key, loadingPayload);
+        delete payload.__usePollingLoading;
 
-        axios[model.method as AxiosMethods](model.url(payload), (model.body as Function)(payload))
+        let body = (model.body && (model.body as Function)(payload)) || {};
+
+        axios[model.method as AxiosMethods](model.url(payload), body)
           .then((result: any) => {
             let successPayload = {
               payload,
@@ -127,7 +134,7 @@ function buildActions(models: Array<ModelApi>, state: IState) {
   return actions;
 }
 
-export function createAppStore(models: Array<ModelApi>) {
+export function createAppStore(models: Array<ModelApi>, plugins?: Array<PluginType>) {
   const state = buildState(models);
   const mutations = buildMutations(models);
   const actions = buildActions(models, state);
@@ -136,5 +143,6 @@ export function createAppStore(models: Array<ModelApi>) {
     state,
     mutations,
     actions,
+    plugins,
   });
 }

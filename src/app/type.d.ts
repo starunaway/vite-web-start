@@ -2,6 +2,8 @@ export type ReducerHandler = (state: any, action: any) => any;
 
 export type AxiosMethods = 'get' | 'put' | 'post' | 'delete';
 
+export type PluginType = (params: any) => Function | Function;
+
 export interface ModelApi {
   key: string;
   subKeys?: Array<string>;
