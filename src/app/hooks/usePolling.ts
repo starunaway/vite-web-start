@@ -6,9 +6,8 @@ interface PollingParameters {
   key: string;
   id: string;
   payload?: any;
-  timeInterval: number;
-  useLoading: Boolean;
-  state: any;
+  timeInterval?: number;
+  useLoading?: Boolean;
 }
 
 const Cache: any = {};

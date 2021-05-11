@@ -2,10 +2,12 @@ import {createRouter, createWebHistory} from 'vue-router';
 
 import Home from '@/pages/Home/index.vue';
 import About from '@/pages/About/index.vue';
+import Quick from '@/pages/quick-chat/index.vue';
 
 const routes = [
-  {path: '/', component: Home},
+  {path: '/home', component: Home},
   {path: '/about', component: About},
+  {path: '/', component: Quick},
 ];
 
 const router = createRouter({
