@@ -67,7 +67,8 @@ import usePolling from '@/app/hooks/usePolling';
 import refCard from './components/refCard.vue';
 import addOrUpdCard from './components/addOrUpdCard.vue';
 import tknOrGvnCard from './components/tknOrGvnCard.vue';
-import {computed, watch, ref, reactive} from 'vue';
+import {computed, watch, ref, reactive, ComputedRef, toRefs} from 'vue';
+import {useStore} from 'vuex';
 export default {
   components: {
     refCard,
@@ -75,35 +76,40 @@ export default {
     tknOrGvnCard,
   },
   setup() {
-    const focusRoomId = computed(() => window.eb?.store.workspace.focusRoomId);
-    const myUserId = computed(() => window.eb?.store.workspace.userId);
-    const peerMemberId = computed(() => window.eb?.store.rooms[focusRoomId.value]?.peerMemberId);
+    const store = useStore();
 
-    const [cur, old, startPolling] = usePolling({
-      key: 'poetry',
-      id: '',
+    let focusRoomId: ComputedRef<string | undefined> = computed(() => store.state.qm.workspace.focusRoomId);
+
+    const startPolling = usePolling({
+      key: 'quickChat',
     });
 
-    watch(
-      focusRoomId,
-      (roomId) =>
-        roomId &&
-        startPolling({
-          customer_id: peerMemberId,
-          broker_id: myUserId,
+    watch(focusRoomId, (roomId) => {
+      if (roomId) {
+        startPolling(roomId, {
           room_id: roomId,
-        })
-    );
+        });
+      }
+    });
 
-    const isNew = ref(false);
-    const handicap_content = ref('');
-    const history_content = ref('');
-    const operation_content = reactive([]);
-    const recommend_reply = ref('');
+    const quickChat = computed(() => store.state.quickChat);
+    let isNew = ref(false);
+    let handicap_content = ref('');
+    let history_content = ref('');
+    let operation_content = reactive([]);
+    let recommend_reply = ref('');
+
+    watch(quickChat, (curData) => {
+      handicap_content.value = curData.result.handicap;
+      history_content.value = curData.result.history;
+      operation_content = curData.result.operations;
+      recommend_reply.value = curData.result.recommend_reply;
+      isNew.value = !!curData.result.handicap;
+    });
 
     const onButtonClick = () => {
       if (recommend_reply) {
-        window.eb.proxy.bondRecommend.sendMessage(focusRoomId, {
+        window.eb?.proxy.bondRecommend.sendMessage(focusRoomId, {
           body: recommend_reply,
           msgtype: 'm.text',
         });
