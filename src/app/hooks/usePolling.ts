@@ -1,5 +1,5 @@
 import EventBridge from '../EventBridge';
-import {computed, ComputedRef, watch} from 'vue';
+import {watch} from 'vue';
 
 interface PollingParameters {
   key: string;
@@ -15,8 +15,6 @@ function usePolling({key, timeInterval = 3000, useLoading = false}: PollingParam
   let cacheId: string | null = null;
   let _curParams: any = null;
   let timer: number;
-
-  let curData: ComputedRef<any> = computed(() => EventBridge.store?.state[key]);
 
   watch(
     () => EventBridge.store?.state[key],

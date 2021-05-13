@@ -22,6 +22,7 @@ html {
 
 body {
   margin: 0;
+  background-color: #fff;
 }
 
 /**
@@ -348,4 +349,37 @@ template {
 
 [hidden] {
   display: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background-color: transparent;
+  border: none;
+}
+::-webkit-scrollbar-track {
+  border: none;
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb:vertical {
+  border: 1px solid rgba(0, 0, 0, 0);
+  box-shadow: 12px 0 0 #d8d8d8 inset;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb::horizontal {
+  height: 10px;
+  border-radius: 5px;
+  background-color: #d8d8d8;
+}
+::-webkit-scrollbar-corner {
+  border: none;
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb:hover:vertical {
+  box-shadow: 12px 0 0 #aeaeae inset;
+}
+
+::-webkit-scrollbar-thumb:hover:horizontal {
+  background-color: #aeaeae;
 }

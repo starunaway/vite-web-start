@@ -1,6 +1,6 @@
 <template>
-  <div class="bond-recomment-tp">
-    <div class="bond-recomment-tp-wrapper">
+  <div class="bond-recommend-tp">
+    <div class="bond-recommend-tp-wrapper">
       <h5 class="handicap">
         <span>自动盘口信息查询</span>
         <span v-if="isNew">NEW</span>
@@ -21,7 +21,7 @@
 
       <h5>自动操作检测:</h5>
       <div class="area operation">
-        <template v-for="operation in operation_content">
+        <template v-for="operation in operation_content.value">
           <addOrUpdCard
             v-if="[0, 3].includes(operation.operationType)"
             :operation="operation"
@@ -92,19 +92,27 @@ export default {
       }
     });
 
-    const quickChat = computed(() => store.state.quickChat);
     let isNew = ref(false);
     let handicap_content = ref('');
     let history_content = ref('');
-    let operation_content = reactive([]);
+    let operation_content = reactive({value: []});
     let recommend_reply = ref('');
+    const quickChat = computed(() => store.state.quickChat);
 
     watch(quickChat, (curData) => {
+      isNew.value = !!curData.result.handicap && curData.result.handicap !== handicap_content.value;
       handicap_content.value = curData.result.handicap;
       history_content.value = curData.result.history;
-      operation_content = curData.result.operations;
+      operation_content.value = curData.result.operations;
       recommend_reply.value = curData.result.recommend_reply;
-      isNew.value = !!curData.result.handicap;
+    });
+
+    watch(isNew, (cur) => {
+      if (cur) {
+        setTimeout(() => {
+          isNew.value = false;
+        }, 1000);
+      }
     });
 
     const onButtonClick = () => {
@@ -116,8 +124,16 @@ export default {
       }
     };
 
+    const handleCardSure = (params: any) => {
+      console.log('handleCardSure', params);
+    };
+
+    const handleCardDelete = () => {};
+
     return {
       onButtonClick,
+      handleCardSure,
+      handleCardDelete,
       isNew,
       handicap_content,
       history_content,
@@ -128,4 +144,110 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.bond-recommend-tp {
+  min-width: 475px;
+  overflow: auto;
+  background-color: #ffffff;
+  font-size: 14px;
+  height: 100%;
+  width: 100%;
+  min-height: 344px;
+  &-wrapper {
+    padding: 8px;
+    height: 100%;
+    // border: 1px solid #dedede;
+    display: flex;
+    border-radius: 2px;
+    flex-direction: column;
+
+    h5 {
+      font-size: 12px;
+      font-weight: bold;
+      color: #000;
+      line-height: 12px;
+      margin-bottom: 4px;
+      margin-top: 0;
+    }
+    h5.handicap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .area {
+      padding: 4px;
+      border: 1px solid #dedede;
+      color: #039e86;
+      border-radius: 2px;
+      margin-bottom: 8px;
+    }
+    .area.auto-handicap {
+      min-height: 48px;
+    }
+    .area.handicap_content {
+      background: linear-gradient(to right, #078f7a, #193d37);
+      color: #fff;
+    }
+    .area.history {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 90px;
+      white-space: pre-line;
+    }
+    .area.operation {
+      flex: 1;
+      padding: 0px;
+      border: none;
+      overflow-y: auto;
+    }
+    .area.recommend_reply {
+      margin-bottom: 8px;
+      font-size: 12px;
+      &.ant-input {
+        box-shadow: none;
+        color: #a0a0a0;
+        outline: none;
+        resize: none;
+        &:focus {
+          color: #a0a0a0;
+        }
+      }
+    }
+    .btn-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      &-left {
+        button {
+          margin-right: 8px;
+        }
+      }
+
+      button.disabled {
+        background-color: #c8c8c8;
+
+        &:hover {
+          background-color: #c8c8c8;
+        }
+      }
+
+      button {
+        &:hover {
+          background-color: #6ec2b5;
+        }
+        border: none;
+        background-color: #039e86;
+        outline: none;
+        width: 60px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
+        color: #fafafa;
+        font-size: 14px;
+        border-radius: 2px;
+      }
+    }
+  }
+}
+</style>
