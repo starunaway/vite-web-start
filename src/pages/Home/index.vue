@@ -24,19 +24,13 @@
   </div>
 
   <div>
-    <button @click="Clogin">counter.login</button>
-    <button @click="loginA">loginA</button>
-    <button @click="loginAAA">loginAAA</button>
-  </div>
-
-  <div>
     <button @click="polling">polling</button>
   </div>
 </template>
 
 <script>
 import {useStore} from 'vuex';
-import {toRefs, watch, watchEffect} from 'vue';
+import {toRefs} from 'vue';
 import EventBridge from '@/app/EventBridge';
 import usePolling from '@/app/hooks/usePolling';
 
@@ -73,41 +67,18 @@ export default {
     handleTestD() {
       EventBridge.commit('s.u.v.w.x.y.z', this.dataA);
     },
-
-    Clogin() {
-      EventBridge.dispatch('counter.login', {
-        userId: 'super',
-        password: 'Super20200105@',
-      });
-    },
-
-    loginA() {
-      EventBridge.dispatch('loginA', {
-        userId: 'super',
-        password: 'Super20200105@',
-      });
-    },
-    loginAAA() {
-      EventBridge.dispatch('counter.loginA.loginA.loginA', {
-        userId: 'super',
-        password: 'Super20200105@',
-      });
-    },
   },
 
   setup() {
     const store = useStore();
 
-    const [cur, old, startPolling] = usePolling({
+    const startPolling = usePolling({
       key: 'poetry',
       id: '',
     });
-    watchEffect(() => {
-      console.log('effect', cur);
-    });
 
     function polling() {
-      startPolling({test: 1});
+      startPolling('李白', {test: 1});
     }
 
     return {...toRefs(store.state), polling};

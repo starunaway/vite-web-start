@@ -1,42 +1,38 @@
 import EventBridge from '../EventBridge';
-import {useStore} from 'vuex';
-import {reactive, toRefs, watch} from 'vue';
+import {watch} from 'vue';
 
 interface PollingParameters {
   key: string;
-  id: string;
   payload?: any;
-  timeInterval: number;
-  useLoading: Boolean;
-  state: any;
+  timeInterval?: number;
+  useLoading?: Boolean;
 }
 
-const Cache: any = {};
+type PollingResult = (cacheKey: string, params: any) => any;
 
-function usePolling({key, timeInterval = 3000, id, useLoading = false}: PollingParameters) {
-  let timer: number | null = null;
-  let _params: any = null;
-  let curData = EventBridge.store?.state[key] || reactive({});
-  let oldData = EventBridge.store?.state[key] || reactive({});
+function usePolling({key, timeInterval = 3000, useLoading = false}: PollingParameters): PollingResult {
+  const PollingCache: any = {};
+  let cacheId: string | null = null;
+  let _curParams: any = null;
+  let timer: number;
+
   watch(
     () => EventBridge.store?.state[key],
-    (cur) => {
-      Cache[id] = cur;
+    (pollingData) => {
+      PollingCache[cacheId as string] = pollingData;
       timer = setTimeout(() => {
-        singlePoll();
+        EventBridge.dispatch(key, {..._curParams, __usePollingLoading: useLoading});
       }, timeInterval);
     }
   );
 
-  function singlePoll() {
-    EventBridge.dispatch(key, {..._params, __usePollingLoading: useLoading});
+  function startPolling(id: string, params: any) {
+    _curParams = params;
+    cacheId = id;
+    clearTimeout(timer);
+    EventBridge.dispatch(key, {...params, __usePollingLoading: useLoading});
   }
 
-  function startPolling(params: any) {
-    _params = params;
-    singlePoll();
-  }
-
-  return [curData, oldData, startPolling];
+  return startPolling;
 }
 export default usePolling;

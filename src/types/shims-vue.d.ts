@@ -12,3 +12,7 @@ declare module '*.vue' {
     // $route: Route;
   }
 }
+interface Window {
+  eb: any;
+  finstation: any;
+}
