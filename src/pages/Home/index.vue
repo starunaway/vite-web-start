@@ -1,30 +1,32 @@
 <template>
-  <div>homes</div>
-  <button @click="handleGo">go about</button>
   <div>
-    <button @click="handleCountClick">count++</button>
-    <span>count is :{{ count }}</span>
-  </div>
-  <div>
-    <button @click="handleTestA">handleTestA</button>
-    <span>test.a is :{{ test.a.hello }}</span>
-  </div>
-  <div>
-    <button @click="handleTestB">handleTestB</button>
-    <span>test.b is :{{ test.b }}</span>
-  </div>
-  <div>
-    <button @click="handleTestC">handleTestC</button>
-    <span>test.c a+b is :{{ test.c }}</span>
-  </div>
+    <div>homes</div>
+    <button @click="handleGo">go about</button>
+    <div>
+      <button @click="handleCountClick">count++</button>
+      <span>count is :{{ count }}</span>
+    </div>
+    <div>
+      <button @click="handleTestA">handleTestA</button>
+      <span>test.a is :{{ test.a.hello }}</span>
+    </div>
+    <div>
+      <button @click="handleTestB">handleTestB</button>
+      <span>test.b is :{{ test.b }}</span>
+    </div>
+    <div>
+      <button @click="handleTestC">handleTestC</button>
+      <span>test.c a+b is :{{ test.c }}</span>
+    </div>
 
-  <div>
-    <button @click="handleTestD">handleTest s.u.v.w.x</button>
-    <span> s.u.v.w.x is :{{ s.u.v.w.x.y.z.go }}</span>
-  </div>
+    <div>
+      <button @click="handleTestD">handleTest s.u.v.w.x</button>
+      <span> s.u.v.w.x is :{{ s.u.v.w.x.y.z.go }}</span>
+    </div>
 
-  <div>
-    <button @click="polling">polling</button>
+    <div>
+      <button @click="polling">polling</button>
+    </div>
   </div>
 </template>
 
@@ -74,7 +76,6 @@ export default {
 
     const startPolling = usePolling({
       key: 'poetry',
-      id: '',
     });
 
     function polling() {

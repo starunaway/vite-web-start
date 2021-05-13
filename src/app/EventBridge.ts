@@ -1,3 +1,4 @@
+import {reactive} from 'vue';
 import {Store} from 'vuex';
 
 interface EventBridgeEvent {
@@ -149,3 +150,7 @@ class EventBridge {
 }
 
 export default new EventBridge();
+
+if (window.eb) {
+  window.eb.initVueStore({observable: reactive}, {});
+}

@@ -1,4 +1,4 @@
-export type ReducerHandler = (state: any, action: any) => any;
+export type Handler<T> = (state: T, action: any) => T;
 
 export type AxiosMethods = 'get' | 'put' | 'post' | 'delete';
 
@@ -14,10 +14,10 @@ export interface ModelApi {
   headers?: object;
   body?: () => any;
   payload?: any;
-  loading?: ReducerHandler;
-  success?: ReducerHandler;
-  failure?: ReducerHandler;
-  reducer?: ReducerHandler;
+  loading?: Handler<any>;
+  success?: Handler<any>;
+  failure?: Handler<any>;
+  reducer?: Handler<any>;
   type?: string;
 }
 

@@ -35,7 +35,7 @@ export default defineComponent({
     renderTest: {
       render() {
         return h('div', [
-          'test',
+          '这个组件使用render api生成的',
           h(
             'button',
 

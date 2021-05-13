@@ -1,0 +1,4 @@
+include:
+  - project: 'ci-templates/nodejs'
+    ref: '1.2.5'
+    file: 'front-plugins.yml'
