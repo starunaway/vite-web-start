@@ -32,7 +32,7 @@
 
 <script>
 import {useStore} from 'vuex';
-import {toRefs} from 'vue';
+import {toRefs, computed, watch} from 'vue';
 import EventBridge from '@/app/EventBridge';
 import usePolling from '@/app/hooks/usePolling';
 
@@ -76,6 +76,10 @@ export default {
 
     const startPolling = usePolling({
       key: 'poetry',
+    });
+    const pollingData = computed(() => store.state.poetry);
+    watch(pollingData, (cur, old) => {
+      console.log(cur);
     });
 
     function polling() {

@@ -86,7 +86,7 @@ const startPolling = usePolling({key: 对应的model.key});
 startPolling(id, payload);
 
 // 使用Polling data
-const pollingData = compute(() => store.state[model.key]);
+const pollingData = computed(() => store.state[model.key]);
 watch(pollingData, (cur, old) => {
   // 相应的逻辑
 });
